@@ -1,7 +1,7 @@
 package test
 
 import (
-  "os"
+	"os"
 	"testing"
 
 	"github.com/gruntwork-io/terratest/modules/terraform"
@@ -9,10 +9,12 @@ import (
 
 func TestExamplesBasic(t *testing.T) {
 
+	// Network areas are organization-scoped: this module needs STACKIT_ORGANIZATION_ID,
+	// not (only) STACKIT_PROJECT_ID like the other modules.
 	terraformOptions := &terraform.Options{
 		TerraformDir: "../examples/basic",
 		Vars: map[string]interface{}{
-			"project_id": os.Getenv("STACKIT_PROJECT_ID"),
+			"organization_id": os.Getenv("STACKIT_ORGANIZATION_ID"),
 		},
 	}
 

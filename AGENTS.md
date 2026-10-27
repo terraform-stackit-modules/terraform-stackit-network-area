@@ -7,6 +7,37 @@ This file provides context and instructions for AI coding agents (Copilot, Curso
 This is a Terraform module for [STACKIT](https://www.stackit.de/en/), the cloud platform by Schwarz Group.
 It is part of the [terraform-stackit-modules](https://github.com/terraform-stackit-modules) organization, which aims to provide community-maintained, production-grade Terraform modules for STACKIT.
 
+### This module: network-area
+
+Composite module for STACKIT **network areas** (SNA): the area, its regional IPv4 config and its
+static routes.
+
+**IMPORTANT — organization-scoped.** These resources take `organization_id`, NOT `project_id`
+(the only module in the org that does). The example and Terratest use `organization_id`
+(`STACKIT_ORGANIZATION_ID` in CI), not `project_id`.
+
+**Sub-modules**
+- `modules/area` — `stackit_network_area` (toggled by `create_area` via `count`).
+- `modules/region` — `stackit_network_area_region` (`for_each` over `regions`); IP ranges,
+  nameservers, prefix lengths live here (IaaS API v2), not on the area.
+- `modules/route` — `stackit_network_area_route` (`for_each` over `routes`).
+
+**Key inputs** — `organization_id` (req), `create_area`/`network_area_id`, `name`, `labels`,
+`regions` (map: `{region?, ipv4 {transfer_network, network_ranges[{prefix}], default_nameservers?,
+default/max/min_prefix_length?}}`),
+`routes` (map: `{region?, destination {type,value}, next_hop {type,value?}, labels?}`).
+
+**Outputs** — `network_area_id`, `region_ids`, `route_ids`.
+
+**Gotchas**
+- `project_id` is NOT used anywhere — network areas are org-scoped. Do not add a project_id variable.
+- `destination`/`next_hop` are nested single objects → assign with `= { ... }`, never `dynamic {}`.
+  Validated: destination.type ∈ cidrv4/cidrv6, next_hop.type ∈ blackhole/internet/ipv4/ipv6 (API
+  currently supports cidrv4 + ipv4 only).
+- regions/routes keyed by a stable id and reference the area's network_area_id via the root wiring
+  (coalesce with var.network_area_id when create_area = false) — no for_each over known-after-apply.
+- SNA, not VPC.
+
 ## Repository structure
 
 ```

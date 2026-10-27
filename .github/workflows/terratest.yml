@@ -36,6 +36,7 @@ jobs:
         env:
           STACKIT_SERVICE_ACCOUNT_KEY: ${{ secrets.STACKIT_SERVICE_ACCOUNT_KEY }}
           STACKIT_PROJECT_ID: ${{ secrets.STACKIT_PROJECT_ID }}
+          STACKIT_ORGANIZATION_ID: ${{ secrets.STACKIT_ORGANIZATION_ID }}
         run: |
           go mod init github.com/terraform-stackit-modules/${{ github.event.repository.name }}
           go get github.com/gruntwork-io/terratest@v1.0.1
