@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.0.0 (2026-10-27)
+
+### Features
+
+* **network-area:** add organization-scoped network area module ([517b09d](https://github.com/terraform-stackit-modules/terraform-stackit-network-area/commit/517b09dc01baf46c30ecb19a47dde552c1786cbc))
+
+### Bug Fixes
+
+* Add STACKIT_ORGANIZATION_ID in Terratest's envvars ([9a05788](https://github.com/terraform-stackit-modules/terraform-stackit-network-area/commit/9a057883b3c0d133dd28b01235067134ff8adc7d))
+
 ## [1.0.1](https://github.com/terraform-stackit-modules/terraform-repo-template/compare/v1.0.0...v1.0.1) (2026-09-09)
 
 ### Bug Fixes
